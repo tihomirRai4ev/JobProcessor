@@ -1,5 +1,6 @@
 package com.sumup.JobProcessor.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sumup.JobProcessor.model.Tasks;
 import com.sumup.JobProcessor.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -30,8 +33,9 @@ public class JobController {
   }
 
 
-  @PostMapping(path = "/processJob", produces = MediaType.TEXT_PLAIN_VALUE)
-  public ResponseEntity<?> processJobExecution(@RequestBody Tasks job) {
+  @PostMapping(path = "/processJob", consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.ALL_VALUE)
+  public ResponseEntity<String> processJobExecution(@RequestBody Tasks job) {
     try {
       return ResponseEntity.ok(jobService.processJob(job));
     } catch (Exception e) {

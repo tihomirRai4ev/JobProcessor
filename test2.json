@@ -20,7 +20,7 @@
 },
 {
 "name":"task-4",
-"command":"rm /tmp/file1",
+"command":"touch /tmp/file2",
 "requires":[
 "task-2",
 "task-3"
