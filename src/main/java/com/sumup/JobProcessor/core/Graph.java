@@ -6,40 +6,38 @@ package com.sumup.JobProcessor.core;
  *
  * @author Tihomir Raychev
  */
-public class Graph {
+public final class Graph {
 
   /**
    * Helper inner class to represent Vertex in the Graph.
    */
   public static class Vertex {
 
-    public String taskName;
+    private String taskName;
 
     public Vertex(String taskName) {
       this.taskName = taskName;
     }
   }
 
-  private final int MAX_VERTS = 200;
+  private Vertex[] vertexList;
 
-  private Vertex[] vertexList; // list of vertices
-
-  private int[][] matrix; // adjacency matrix
+  private int[][] adjacencyMatrix;
 
   private int numVerts; // current number of vertices
 
   private String[] sortedArray;
 
-  public Graph() {
-    vertexList = new Vertex[MAX_VERTS];
-    matrix = new int[MAX_VERTS][MAX_VERTS];
+  public Graph(int size) {
+    vertexList = new Vertex[size];
+    adjacencyMatrix = new int[size][size];
     numVerts = 0;
-    for (int i = 0; i < MAX_VERTS; i++) {
-      for (int k = 0; k < MAX_VERTS; k++) {
-        matrix[i][k] = 0;
+    for (int i = 0; i < size; i++) {
+      for (int k = 0; k < size; k++) {
+        adjacencyMatrix[i][k] = 0;
       }
     }
-    sortedArray = new String[MAX_VERTS]; // sorted vert labels
+    sortedArray = new String[size];
   }
 
   public void addVertex(String name) {
@@ -47,7 +45,7 @@ public class Graph {
   }
 
   public void addEdge(int start, int end) {
-    matrix[start][end] = 1;
+    adjacencyMatrix[start][end] = 1;
   }
 
   public void displayVertex(int v) {
@@ -71,12 +69,12 @@ public class Graph {
       deleteVertex(currentVertex); // delete vertex
     }
 
-    // vertices all gone; display sortedArray
-    System.out.print("Topologically sorted order: ");
-    for (int j = 0; j < orig_nVerts; j++) {
-      System.out.print(sortedArray[j] + " ");
+    // TODO (traychev) add specific checked exception.
+    for (String val : sortedArray) {
+      if (val == null) {
+        throw new RuntimeException("Cyclic dependency detected, aborting job");
+      }
     }
-    System.out.println();
   }
 
   public String[] getSortedArray() {
@@ -91,7 +89,7 @@ public class Graph {
       isEdge = false; // check edges
       for (int col = 0; col < numVerts; col++) {
         // if edge to another
-        if (matrix[row][col] > 0) {
+        if (adjacencyMatrix[row][col] > 0) {
           isEdge = true;
           break; // this vertex has a successor try another
         }
@@ -124,13 +122,13 @@ public class Graph {
 
   private void moveRowUp(int row, int length) {
     if (length >= 0) {
-      System.arraycopy(matrix[row + 1], 0, matrix[row], 0, length);
+      System.arraycopy(adjacencyMatrix[row + 1], 0, adjacencyMatrix[row], 0, length);
     }
   }
 
   private void moveColLeft(int col, int length) {
     for (int row = 0; row < length; row++) {
-      matrix[row][col] = matrix[row][col + 1];
+      adjacencyMatrix[row][col] = adjacencyMatrix[row][col + 1];
     }
   }
 }

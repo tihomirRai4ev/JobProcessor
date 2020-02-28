@@ -9,17 +9,25 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
+/**
+ * The Service provides api for processing the job and solves the dependency tree.
+ *
+ * @author traychev
+ */
 @Service
 public class JobService {
 
+  private static final String BASH = "#!/usr/bin/env bash";
+
   public String processJob(Tasks tasks) {
-    Graph graph = new Graph();
+    int size = tasks.getNumberOfTasks();
+    Graph graph = new Graph(size);
     Map<String, List<String>> taskToDependencies = new HashMap<>();
     Map<String, Integer> taskToId = new HashMap<>();
     Map<String, Task> taskNameToTask = new HashMap<>();
     int i = 0;
     for (Task task : tasks.getTasks()) {
-      graph.addVertex(task.getName()); // Add vertex
+      graph.addVertex(task.getName());
       taskToId.put(task.getName(), i++);
       taskNameToTask.put(task.getName(), task);
       String[] requires = task.getRequires();
@@ -46,13 +54,9 @@ public class JobService {
     graph.performTopologicalSort();
     String[] sortedTasksNames = graph.getSortedArray();
     StringBuilder builder = new StringBuilder();
-    builder.append("#!/usr/bin/env bash")
-        .append(System.getProperty("line.separator"));
+    builder.append(BASH).append(System.getProperty("line.separator"));
 
     for (String taskName : sortedTasksNames) {
-      if (taskName == null) {
-        break;
-      }
       builder.append(taskNameToTask.get(taskName).getCommand())
           .append(System.getProperty("line.separator"));
     }

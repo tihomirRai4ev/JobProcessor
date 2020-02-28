@@ -9,6 +9,10 @@ public class Tasks {
     return tasks;
   }
 
+  public int getNumberOfTasks() {
+    return tasks.length;
+  }
+
   public void setTasks(Task[] tasks) {
     this.tasks = tasks;
   }
