@@ -133,19 +133,4 @@ public class Graph {
       matrix[row][col] = matrix[row][col + 1];
     }
   }
-
-  public static void main(String[] args) {
-    Graph g = new Graph();
-    g.addVertex("task1"); // 0
-    g.addVertex("task2"); // 1
-    g.addVertex("task3"); // 2
-    g.addVertex("task4"); // 3
-
-    g.addEdge(2, 1); // task2 depends on task3
-    g.addEdge(0, 2); // task3 depends on task1
-    g.addEdge(1, 3); // task4 depends on task2
-    g.addEdge(2, 3); // task4 depends on task3
-
-    g.performTopologicalSort(); // do the sort
-  }
 }
