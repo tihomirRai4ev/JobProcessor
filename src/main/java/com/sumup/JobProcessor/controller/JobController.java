@@ -13,7 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * RestController exposing api for processing jobs.
+ * RestController exposing api for processing jobs. The api can be seen on the following address:
+ * <p>
+ * http://localhost:8080/server/swagger-ui.html#/job-controller or curl:
+ * <p>
+ * curl -X POST "http://localhost:8080/server/api/v1/processJob" -d @test2.json
+ * <p>
+ * In case of cyclic dependency between the tasks RuntimeException is thrown. In case the commands
+ * are misconfigured unexpected error can occur depending of the commands (e.g if they remove a
+ * .class file or break the server).
  *
  * @author traychev
  */

@@ -9,7 +9,7 @@ package com.sumup.JobProcessor.core;
 public final class Graph {
 
   /**
-   * Helper inner class to represent Vertex in the Graph.
+   * Helper inner class to represent а Vertex in the Graph.
    */
   public static class Vertex {
 
@@ -48,13 +48,7 @@ public final class Graph {
     adjacencyMatrix[start][end] = 1;
   }
 
-  public void displayVertex(int v) {
-    System.out.print(vertexList[v].taskName);
-  }
-
   public void performTopologicalSort() {
-    int orig_nVerts = numVerts;
-
     while (numVerts > 0) {
       // get a vertex with no successors, or -1
       int currentVertex = noSuccessors();
@@ -81,7 +75,7 @@ public final class Graph {
     return sortedArray;
   }
 
-  // returns vert with no successors (or -1 if no such verts)
+  // returns vertex with no successors (or -1 if no such verts)
   public int noSuccessors() {
     boolean isEdge;
 
@@ -108,11 +102,9 @@ public final class Graph {
       if (numVerts - 1 - delVert >= 0) {
         System.arraycopy(vertexList, delVert + 1, vertexList, delVert, numVerts - 1 - delVert);
       }
-
       for (int row = delVert; row < numVerts - 1; row++) {
         moveRowUp(row, numVerts);
       }
-
       for (int col = delVert; col < numVerts - 1; col++) {
         moveColLeft(col, numVerts - 1);
       }
